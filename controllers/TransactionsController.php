@@ -92,46 +92,49 @@ class TransactionsController extends Controller
      public function actionCreate()
      {
          $model = new Transactions();
- 
+     
          if ($model->load(Yii::$app->request->post())) {
              $transactionDetailsData = Yii::$app->request->post('TransactionDetailsJson');
              $model->transactionDetailsData = json_decode($transactionDetailsData, true);
- 
+     
+             // Ambil nilai amount_paid dan hitung change_returned
              $model->amount_paid = Yii::$app->request->post('Transactions')['amount_paid'];
              $model->change_returned = $model->amount_paid - $model->total;
- 
+     
              if ($model->save()) {
                  $this->saveTransactionDetails($model);
                  return $this->redirect(['view', 'transaction_id' => $model->transaction_id]);
              }
          }
- 
+     
          return $this->render('create', [
              'model' => $model,
          ]);
      }
- 
+     
      public function actionUpdate($transaction_id)
      {
          $model = $this->findModel($transaction_id);
- 
-         if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())) {
+     
+         if ($model->load(Yii::$app->request->post())) {
              $transactionDetailsData = Yii::$app->request->post('TransactionDetailsJson');
              $model->transactionDetailsData = json_decode($transactionDetailsData, true);
- 
+     
+             // Ambil nilai amount_paid dan hitung change_returned
              $model->amount_paid = Yii::$app->request->post('Transactions')['amount_paid'];
              $model->change_returned = $model->amount_paid - $model->total;
- 
+     
              if ($model->save()) {
                  $this->saveTransactionDetails($model);
                  return $this->redirect(['view', 'transaction_id' => $model->transaction_id]);
              }
          }
- 
+     
          return $this->render('update', [
              'model' => $model,
          ]);
      }
+     
 
     public function actionGetProductPrice($id)
     {

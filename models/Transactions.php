@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace app\models;
 
@@ -28,8 +28,6 @@ class Transactions extends \yii\db\ActiveRecord
     }
 
     public $transactionDetailsData; // properti virtual
-    public $amount_paid;
-    public $change_returned;
 
     /**
      * {@inheritdoc}
@@ -115,5 +113,4 @@ class Transactions extends \yii\db\ActiveRecord
         }
         return 'TR00001';
     }
-
 }
