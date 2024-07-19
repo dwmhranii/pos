@@ -24,6 +24,7 @@ use app\models\Product;
 
     <div class="form-group">
         <label for="product-list">Products</label>
+        <input type="text" id="product-search" class="form-control" placeholder="Cari produk..">
         <table class="table table-bordered" id="product-list">
             <thead>
                 <tr>
@@ -171,6 +172,15 @@ $('form').on('beforeSubmit', function() {
     $('#transaction-details-json').val(JSON.stringify(details));
     return true;
 });
+
+// Search function for products
+$(document).on('keyup', '#product-search', function() {
+    var value = $(this).val().toLowerCase();
+    $("#product-list tbody tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+});
+
 JS
 );
 ?>
