@@ -24,7 +24,6 @@ use app\models\Product;
 
     <div class="form-group">
         <label for="product-list">Products</label>
-        <input type="text" id="product-search" class="form-control" placeholder="Cari produk..">
         <table class="table table-bordered" id="product-list">
             <thead>
                 <tr>
@@ -53,6 +52,7 @@ use app\models\Product;
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
         <?= Html::a('Kembali', ['index'], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Cetak Struk', ['transactions/print', 'transaction_id' => $model->transaction_id], ['class' => 'btn btn-primary', 'target' => '_blank']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

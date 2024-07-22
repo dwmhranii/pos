@@ -53,6 +53,7 @@ class Product extends \yii\db\ActiveRecord
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'category_id']],
             [['stock'], 'integer', 'min' => 0],
             [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
+            [['product_code'], 'unique'],
         ];
     }
 
@@ -222,6 +223,11 @@ class Product extends \yii\db\ActiveRecord
 
         $pdf->WriteHTML($html);
         return $pdf->Output('Product_Barcode.pdf', \Mpdf\Output\Destination::INLINE);
+    }
+
+    public static function primaryKey()
+    {
+        return ['product_id'];
     }
 
 }

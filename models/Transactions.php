@@ -40,7 +40,9 @@ class Transactions extends \yii\db\ActiveRecord
             [['total', 'amount_paid', 'change_returned'], 'number'],
             [['transaction_date'], 'safe'],
             [['transaction_code'], 'string', 'max' => 255],
-            [['transactionDetailsData'], 'safe'], //  validasi untuk properti virtual
+            [['transactionDetailsData'], 'safe'], 
+            [['created_at'], 'safe'],
+            [['product_code'], 'unique'],
         ];
     }
 
@@ -57,6 +59,7 @@ class Transactions extends \yii\db\ActiveRecord
             'transaction_code' => 'Kode Transaksi',
             'amount_paid' => 'Amount Paid',
             'change_returned' => 'Change Returned',
+            'created_at' => 'Created At',
         ];
     }
 
@@ -104,13 +107,25 @@ class Transactions extends \yii\db\ActiveRecord
      */
     private function generateKodeTransaksi()
     {
-        $lastTransaction = self::find()->orderBy(['transaction_id' => SORT_DESC])->one();
+        $today = date('Ymd'); // Format tanggal hari ini sebagai Ymd (tahunbulanharitanggal)
+        $todayStart = $today . '0000'; // Membuat string dasar untuk hari ini
+        $todayEnd = $today . '9999'; // Membuat string dasar untuk akhir hari ini
+    
+        $lastTransaction = self::find()
+            ->where(['like', 'transaction_code', 'TR' . $today . '-', false])
+            ->orderBy(['transaction_id' => SORT_DESC])
+            ->one();
+        
         if ($lastTransaction) {
             $lastCode = $lastTransaction->transaction_code;
-            $lastNumber = (int)substr($lastCode, 2);
+            $lastNumber = (int)substr($lastCode, -4); // Mendapatkan nomor terakhir dari 4 karakter terakhir
             $newNumber = $lastNumber + 1;
-            return 'TR' . str_pad($newNumber, 5, '0', STR_PAD_LEFT);
+        } else {
+            $newNumber = 1;
         }
-        return 'TR00001';
+    
+        $newCode = 'TR-' . $today . '-' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        return $newCode;
     }
+    
 }

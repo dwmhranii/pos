@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('Print Receipt', ['print-receipt', 'transaction_id' => $model->transaction_id], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= DetailView::widget([

@@ -16,6 +16,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
+use yii\web\BadRequestHttpException;
 
 /**
  * TransactionsController implements the CRUD actions for Transactions model.
@@ -92,6 +93,7 @@ class TransactionsController extends Controller
      public function actionCreate()
      {
          $model = new Transactions();
+         $model->transaction_id = Yii::$app->security->generateRandomString();
      
          if ($model->load(Yii::$app->request->post())) {
              $transactionDetailsData = Yii::$app->request->post('TransactionDetailsJson');
@@ -256,4 +258,21 @@ class TransactionsController extends Controller
         }
     }
 
+    public function actionPrintReceipt($transaction_id)
+    {
+        $transaction = Transactions::findOne($transaction_id);
+    
+        if (empty($transaction)) {
+            throw new \Exception('Transaction not found.');
+        }
+    
+        $pdf = new \Mpdf\Mpdf();
+    
+        $html = $this->renderPartial('_receipt', [
+            'transaction' => $transaction,
+        ]);
+    
+        $pdf->WriteHTML($html);
+        return $pdf->Output('Receipt.pdf', \Mpdf\Output\Destination::INLINE);
+    }    
 }

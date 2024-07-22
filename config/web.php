@@ -22,7 +22,14 @@ $config = [
                 'transactions/get-product-price' => 'transactions/get-product-price',
                 'transactions/create' => 'transactions/create',
                 'transactions/view/<id:\d+>' => 'transactions/view',
+                'transactions/print/<transaction_id:\d+>' => 'transactions/print',
+                
             ],
+        ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'defaultTimeZone' => 'Asia/Jakarta',
+            'currencyCode' => 'IDR', 
         ],
         'view' => [
             'theme' => [
